@@ -33,6 +33,7 @@ import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import Footer from "./components/footer";
 import Link from "next/link";
+import { ThreeDMarquee } from "./components/ui/3d-marquee";
 
 // Animation component for fade-in effects
 const FadeIn = ({
@@ -63,6 +64,32 @@ const FadeIn = ({
 };
 
 export default function Component() {
+  const baseImages = [
+    "images/SFAweb.png",
+    "images/SFAweb2.png",
+    "images/SFAweb3.png",
+    "images/SFAweb4.png",
+    "images/SFAweb5.png",
+    "images/SFAweb6.png",
+  ];
+  const mobileImages = [
+    "images/1.png",
+    "images/2.png",
+    "images/3.png",
+    "images/4.png",
+    "images/5.png",
+    "images/6.png",
+    "images/7.png",
+  ];
+
+  const randomImages = Array.from({ length: 30 }, () => {
+    const randomIndex = Math.floor(Math.random() * baseImages.length);
+    return baseImages[randomIndex];
+  });
+  const randomImagesMobile = Array.from({ length: 30 }, () => {
+    const randomIndex = Math.floor(Math.random() * mobileImages.length);
+    return mobileImages[randomIndex];
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
@@ -466,142 +493,131 @@ export default function Component() {
           </div>
         </section>
 
-        {/* Product Section */}
         <section
-          id="product"
-          className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-cyan-50 to-blue-100 relative"
-        >
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute top-20 right-20 w-80 h-80 rounded-full bg-cyan-300/20 animate-pulse [animation-duration:7s]"></div>
-            <div className="absolute bottom-20 left-20 w-60 h-60 rounded-full bg-blue-400/20 animate-pulse [animation-duration:9s]"></div>
+      id="product"
+      className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-cyan-50 to-blue-100 relative"
+    >
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 right-20 w-80 h-80 rounded-full bg-cyan-300/20 animate-pulse [animation-duration:7s]"></div>
+        <div className="absolute bottom-20 left-20 w-60 h-60 rounded-full bg-blue-400/20 animate-pulse [animation-duration:9s]"></div>
+      </div>
+
+      <div className="container px-4 md:px-6 relative z-10">
+        <FadeIn>
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">
+                Experience SFA365 Anywhere
+              </h2>
+              <p className="mx-auto max-w-[700px] text-gray-700 md:text-xl">
+                Access your sales data from our powerful web portal or on-the-go with our mobile app
+              </p>
+            </div>
           </div>
-          <div className="container px-4 md:px-6 relative z-10">
-            <FadeIn>
-              <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-                <div className="space-y-2">
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">
-                    Experience SFA365 Anywhere
-                  </h2>
-                  <p className="mx-auto max-w-[700px] text-gray-700 md:text-xl">
-                    Access your sales data from our powerful web portal or
-                    on-the-go with our mobile app
-                  </p>
+        </FadeIn>
+
+        {/* Web Portal Section */}
+        <div className="mb-24">
+          <FadeIn delay={100}>
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-blue-800 mb-4">Powerful Web Portal</h3>
+              <p className="mx-auto max-w-[800px] text-gray-700 text-lg">
+                Our comprehensive web portal gives you full control over your sales pipeline, team performance, and
+                customer data with intuitive dashboards and powerful reporting tools.
+              </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={200}>
+            <div className="mx-auto max-w-7xl rounded-3xl bg-gray-950/5 p-2 ring-1 ring-neutral-700/10 dark:bg-neutral-800 mb-12">
+              <ThreeDMarquee images={randomImages} mobile={false} />
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={300}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-cyan-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Comprehensive dashboards and analytics</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-cyan-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Team performance tracking</span>
                 </div>
               </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <FadeIn delay={100} className="order-2 lg:order-1">
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-blue-800">
-                    Powerful Web Portal
-                  </h3>
-                  <p className="text-gray-700">
-                    Our comprehensive web portal gives you full control over
-                    your sales pipeline, team performance, and customer data.
-                    With intuitive dashboards and powerful reporting tools,
-                    you'll have everything you need to drive your sales
-                    strategy.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-cyan-600" />
-                      <span>Comprehensive dashboards and analytics</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-cyan-600" />
-                      <span>Team performance tracking</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-cyan-600" />
-                      <span>Advanced reporting and forecasting</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-cyan-600" />
-                      <span>Customer relationship management</span>
-                    </li>
-                  </ul>
-                  {/* <Button className="group bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
-                    Explore Portal Features
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Button> */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-cyan-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Advanced reporting and forecasting</span>
                 </div>
-              </FadeIn>
-              <FadeIn delay={200} className="order-1 lg:order-2">
-                <div className="relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-cyan-500/20 hover:scale-[1.02]">
-                  <div className="aspect-[16/10] bg-gradient-to-br from-white to-cyan-50 relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-[90%] rounded-lg overflow-hidden border shadow-lg">
-                        <Image
-                          src="/images/SFAweb.png"
-                          alt="SFA365 Web Portal"
-                          width={1200}
-                          height={800}
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-cyan-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Customer relationship management</span>
                 </div>
-              </FadeIn>
+              </div>
             </div>
+          </FadeIn>
+        </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-24">
-              <FadeIn delay={300}>
-                <div className="relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-blue-500/20 hover:scale-[1.02]">
-                  <div className="aspect-[9/16] max-w-[300px] mx-auto bg-gradient-to-br from-white to-blue-50 relative">
-                    <div className="absolute inset-[5%] rounded-[2rem] overflow-hidden border shadow-lg">
-                      <Image
-                        src="/images/Mobileapp.png"
-                        alt="SFA365 Mobile App"
-                        width={900}
-                        height={1600}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="absolute top-[2%] left-1/2 -translate-x-1/2 w-1/3 h-[14px] bg-black rounded-full"></div>
-                  </div>
-                </div>
-              </FadeIn>
-              <FadeIn delay={400}>
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-blue-800">
-                    Mobile App
-                  </h3>
-                  <p className="text-gray-700">
-                    Stay connected to your sales data wherever you go with our
-                    powerful mobile app. Update deals, check team performance,
-                    and respond to customer inquiries in real-time from your
-                    smartphone or tablet.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                      <span>Real-time notifications and alerts</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                      <span>On-the-go deal updates</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                      <span>Quick access to customer information</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                      <span>Offline mode for field sales teams</span>
-                    </li>
-                  </ul>
-                  {/* <Button className="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
-                    Explore Mobile Features
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Button> */}
-                </div>
-              </FadeIn>
+        {/* Divider */}
+        <FadeIn delay={400}>
+          <div className="flex items-center justify-center mb-24">
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
+            <div className="mx-8 p-3 rounded-full bg-white shadow-lg">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600"></div>
             </div>
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
           </div>
-        </section>
+        </FadeIn>
 
+        {/* Mobile App Section */}
+        <div>
+          <FadeIn delay={500}>
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-blue-800 mb-4">Mobile App</h3>
+              <p className="mx-auto max-w-[800px] text-gray-700 text-lg">
+                Stay connected to your sales data wherever you go. Update deals, check team performance, and respond to
+                customer inquiries in real-time from your smartphone or tablet.
+              </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={600}>
+            <div className="mx-auto max-w-7xl rounded-3xl bg-gray-950/5 p-2 ring-1 ring-neutral-700/10 dark:bg-neutral-800 mb-12">
+              <ThreeDMarquee images={randomImagesMobile} mobile={true} />
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={700}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Real-time notifications and alerts</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">On-the-go deal updates</span>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Quick access to customer information</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Offline mode for field sales teams</span>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+
+    
         {/* Features Section */}
         <section
           id="features"
