@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DemoRequest {
+  id               String   @id @default(cuid())
+  companyName      String
+  contact          String
+  email            String
+  natureOfBusiness String
+  sizeOfManpower   String
+  additionalNotes  String?
+  contactNumber    String
+  status           String   @default("pending") // pending, contacted, completed
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("demo_requests")
+}
+
+model Admin {
+  id       String @id @default(cuid())
+  username String @unique
+  password String
+
+  @@map("admins")
+}
