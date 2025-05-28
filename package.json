@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "vercel-build": "npm ci && prisma generate && prisma migrate deploy && next build",
+    "build": "next build",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -22,17 +23,17 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.16.0",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^3.4.17",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "prisma": "^6.8.2",
+    "tsx": "^4.19.4"
   },
   "devDependencies": {
     "@types/node": "^20.17.51",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "prisma": "^6.8.2",
-    "tailwindcss": "^3.4.17",
-    "tsx": "^4.19.4",
     "typescript": "^5"
   }
 }
