@@ -90,49 +90,70 @@ export default function Component() {
     const randomIndex = Math.floor(Math.random() * mobileImages.length);
     return mobileImages[randomIndex];
   });
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [scrolled, setScrolled] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.95]);
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState("home")
+  const [scrolled, setScrolled] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.95])
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolled(true);
+        setScrolled(true)
       } else {
-        setScrolled(false);
+        setScrolled(false)
       }
 
-      const sections = [
-        "home",
-        "business",
-        "product",
-        "features",
-        "pricing",
-        "contact",
-      ];
-      const scrollPosition = window.scrollY + 100;
+      const sections = ["home", "business", "product", "features", "pricing", "contact"]
+      const scrollPosition = window.scrollY + 100
 
       for (const section of sections) {
-        const element = document.getElementById(section);
+        const element = document.getElementById(section)
         if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
-            break;
+          const { offsetTop, offsetHeight } = element
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section)
+            break
           }
         }
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // Close mobile menu when clicking outside or on escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (isMenuOpen && !target.closest(".mobile-menu-container")) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isMenuOpen) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("keydown", handleEscape)
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+      document.body.style.overflow = "unset"
+    }
+  }, [isMenuOpen])
 
   const navItems = [
     { id: "home", label: "Home", icon: BarChart3 },
@@ -165,11 +186,9 @@ export default function Component() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2 text-2xl font-bold"
+              className="flex items-center gap-2 text-2xl font-bold z-50"
             >
-              <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-                SFA
-              </span>
+              <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">SFA</span>
               <span className="text-red-500">365</span>
             </motion.div>
 
@@ -206,49 +225,92 @@ export default function Component() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-blue-100 text-blue-700"
+              className="md:hidden p-2 rounded-lg bg-blue-100 text-blue-700 z-50 relative"
+              aria-label="Toggle mobile menu"
             >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              <AnimatePresence mode="wait">
+                {isMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white/95 backdrop-blur-md border-t border-white/20"
-            >
-              <div className="container mx-auto px-4 py-4 space-y-2">
-                {navItems.map((item, index) => (
-                  <motion.button
-                    key={item.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => scrollToSection(item.id)}
-                    className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-left transition-colors hover:bg-blue-50"
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+                onClick={() => setIsMenuOpen(false)}
+              />
+
+              {/* Mobile Menu */}
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="mobile-menu-container fixed top-20 left-4 right-4 bg-white/95 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl z-50 md:hidden max-h-[calc(100vh-6rem)] overflow-y-auto"
+              >
+                <div className="p-6 space-y-1">
+                  {navItems.map((item, index) => (
+                    <motion.button
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onClick={() => scrollToSection(item.id)}
+                      className={`flex items-center space-x-3 w-full px-4 py-4 rounded-xl text-left transition-all duration-300 ${
+                        activeSection === item.id
+                          ? "bg-gradient-to-r from-cyan-100 to-blue-100 text-blue-700 shadow-sm"
+                          : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="font-medium">{item.label}</span>
+                    </motion.button>
+                  ))}
+
+                  {/* Mobile CTA Button */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: navItems.length * 0.1 }}
+                    className="pt-4 border-t border-gray-200 mt-4"
                   >
-                    <item.icon className="w-5 h-5 text-blue-600" />
-                    <span>{item.label}</span>
-                  </motion.button>
-                ))}
-                <div className="pt-4">
-                  <Link href="/book-demo">
-                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white">
-                      Book a Demo
-                    </Button>
-                  </Link>
+                    <Link href="/book-demo" className="block">
+                      <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        Book a Demo
+                      </Button>
+                    </Link>
+                  </motion.div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </motion.header>
